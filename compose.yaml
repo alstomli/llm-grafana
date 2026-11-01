@@ -1,0 +1,22 @@
+services:
+  grafana:
+    image: zihan000/llm-grafana:local
+    build: .
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:?Set GRAFANA_PASSWORD in .env}
+      PROMETHEUS_URL: ${PROMETHEUS_URL:-http://prometheus:9090}
+    networks:
+      - monitoring
+    ports:
+      - '127.0.0.1:3000:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+volumes:
+  grafana-data:
+    name: ${GRAFANA_VOLUME_NAME:-monitoring_grafana-data}
+networks:
+  monitoring:
+    external: true
+    name: llm-monitoring
