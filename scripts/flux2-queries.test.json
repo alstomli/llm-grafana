@@ -31,10 +31,6 @@
           "values": "1+0x10"
         },
         {
-          "series": "flux2_oldest_queued_age_seconds{instance=\"flux.example\",job=\"flux2\"}",
-          "values": "60+0x10"
-        },
-        {
           "series": "flux2_jobs_completed_total{instance=\"flux.example\",job=\"flux2\"}",
           "values": "0+1x10"
         },
@@ -48,18 +44,6 @@
         },
         {
           "series": "flux2_requests_rejected_total{instance=\"flux.example\",job=\"flux2\",reason=\"queue_full\"}",
-          "values": "0+2x10"
-        },
-        {
-          "series": "flux2_queue_wait_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"10\"}",
-          "values": "0+1x10"
-        },
-        {
-          "series": "flux2_queue_wait_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"30\"}",
-          "values": "0+2x10"
-        },
-        {
-          "series": "flux2_queue_wait_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"+Inf\"}",
           "values": "0+2x10"
         },
         {
@@ -151,10 +135,6 @@
           "values": "999+100x10"
         },
         {
-          "series": "flux2_oldest_queued_age_seconds{instance=\"other.example\",job=\"flux2\"}",
-          "values": "999+100x10"
-        },
-        {
           "series": "flux2_jobs_completed_total{instance=\"other.example\",job=\"flux2\"}",
           "values": "999+100x10"
         },
@@ -168,18 +148,6 @@
         },
         {
           "series": "flux2_requests_rejected_total{instance=\"other.example\",job=\"flux2\",reason=\"queue_full\"}",
-          "values": "999+100x10"
-        },
-        {
-          "series": "flux2_queue_wait_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"10\"}",
-          "values": "999+100x10"
-        },
-        {
-          "series": "flux2_queue_wait_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"30\"}",
-          "values": "999+100x10"
-        },
-        {
-          "series": "flux2_queue_wait_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"+Inf\"}",
           "values": "999+100x10"
         },
         {
@@ -289,26 +257,12 @@
           ]
         },
         {
-          "expr": "flux2_jobs{job=\"flux2\",instance=\"flux.example\"}",
+          "expr": "flux2_jobs{job=\"flux2\",instance=\"flux.example\",state=\"running\"}",
           "eval_time": "10m",
           "exp_samples": [
-            {
-              "labels": "flux2_jobs{instance=\"flux.example\",job=\"flux2\",state=\"queued\"}",
-              "value": 2
-            },
             {
               "labels": "flux2_jobs{instance=\"flux.example\",job=\"flux2\",state=\"running\"}",
               "value": 1
-            }
-          ]
-        },
-        {
-          "expr": "flux2_oldest_queued_age_seconds{job=\"flux2\",instance=\"flux.example\"}",
-          "eval_time": "10m",
-          "exp_samples": [
-            {
-              "labels": "flux2_oldest_queued_age_seconds{instance=\"flux.example\",job=\"flux2\"}",
-              "value": 60
             }
           ]
         },
@@ -349,16 +303,6 @@
             {
               "labels": "{reason=\"queue_full\"}",
               "value": 2
-            }
-          ]
-        },
-        {
-          "expr": "histogram_quantile(0.95, sum by(le) (rate(flux2_queue_wait_seconds_bucket{job=\"flux2\",instance=\"flux.example\"}[5m])))",
-          "eval_time": "10m",
-          "exp_samples": [
-            {
-              "labels": "{}",
-              "value": 28
             }
           ]
         },

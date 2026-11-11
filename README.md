@@ -11,9 +11,9 @@ image dashboard afterward. Use Grafana's version check when overwriting it later
 
 The **Image Pod** variable discovers only `up{job="flux2"}`. Every panel filters
 the selected instance before aggregation; both GPUs retain their `gpu` label.
-Twenty panels show readiness, scrape/GPU collector health, output disk space,
-queued/running jobs, oldest queued age, starts/completions, safe failure/rejection
-categories, queue/generation/job p95 latency, GPU measurements and alert state.
+Eighteen panels show readiness, scrape/GPU collector health, output disk space,
+active jobs, starts/completions, safe failure/rejection
+categories, generation/job p95 latency, GPU measurements and alert state.
 Idle percentiles and missing measurements remain **No data**. No prompts, user
 UUIDs or job IDs are metric labels. A ready/GPU chart complements the backend's
 BF16/no-offload validation; charts alone do not prove dtype or tensor placement.
@@ -21,7 +21,9 @@ BF16/no-offload validation; charts alone do not prove dtype or tensor placement.
 The companion Prometheus repository owns alert rules and threshold tests.
 The alert panel displays pending/firing rules; outbound notifications require
 separate Alertmanager configuration and a chosen receiver. Browser-only image
-retention is independent of the backend's 24-hour temporary job/output TTL.
+retention is independent of the backend's 24-hour temporary output TTL.
+Job/status/idempotency and daily usage are process-local and reset on service
+restart; busy requests receive 429 immediately, with no waiting queue.
 
 Read-only acceptance (use the actual Pod hostname, without a scheme):
 
@@ -32,7 +34,7 @@ GRAFANA_SETTINGS_FILE=/path/to/private/settings.env python scripts/check-flux2-d
 ```
 
 The cloud check verifies the live dashboard, private datasource, healthy model,
-both GPUs, serialized-worker queue bounds, all panel queries and seven loaded
+both GPUs, single active-job/no-queue bounds, all panel queries and six loaded
 alert rules. It does not generate images or change deployments. Also run the
 existing `scripts/check-deployment.py` with current chat instances to verify chat
 monitoring. For rollback, remove/disable the image scrape while retaining chat

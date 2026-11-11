@@ -16,7 +16,7 @@ SELECTORS = re.compile(r'\b(?:up|ALERTS|gpu_[a-zA-Z0-9_:]+|flux2_[a-zA-Z0-9_:]+)
 def validate_dashboard(dashboard):
     assert dashboard['uid'] == UID, 'Wrong dashboard UID'
     panels = dashboard['panels']
-    assert len(panels) == 20 and len({p['id'] for p in panels}) == 20
+    assert len(panels) == 18 and len({p['id'] for p in panels}) == 18
     variable = next(v for v in dashboard['templating']['list'] if v['name'] == 'pod')
     assert variable['query']['query'] == 'label_values(up{job="flux2"}, instance)'
     assert variable['multi'] is False and variable['includeAll'] is False
@@ -75,8 +75,8 @@ def main():
         assert all(float(v['value'][1]) > 0 for v in values), 'Missing GPU memory measurement'
     jobs = query('flux2_jobs' + selector)
     counts = {v['metric'].get('state'): float(v['value'][1]) for v in jobs}
-    assert counts.keys() == {'queued', 'running'}, 'Missing queue state gauges'
-    assert 0 <= counts['queued'] <= 8 and 0 <= counts['running'] <= 1, 'Invalid serialized-worker queue counts'
+    assert 'running' in counts, 'Missing active-job gauge'
+    assert counts.get('queued', 0) == 0 and 0 <= counts['running'] <= 1, 'Only one immediate job and no waiting queue are allowed'
     for panel in panels:
         for target in panel['targets']:
             # Parse/execute every real dashboard query; idle histogram/counter series
@@ -84,8 +84,8 @@ def main():
             query(target['expr'].replace('${pod}', args.expected_instance).replace('$__rate_interval', '5m'))
     rules = prom('/api/v1/rules?type=alert')['groups']
     flux_rules = [r for group in rules if group['name'] == 'flux2' for r in group['rules']]
-    assert len(flux_rules) == 7 and all(r['health'] == 'ok' for r in flux_rules), 'FLUX.2 alert rules missing or unhealthy'
-    print('PASS: image dashboard, protected scrape, both GPUs, queue bounds, queries and alert rules')
+    assert len(flux_rules) == 6 and all(r['health'] == 'ok' for r in flux_rules), 'FLUX.2 alert rules missing or unhealthy'
+    print('PASS: image dashboard, protected scrape, both GPUs, no-queue admission, queries and alert rules')
 
 
 if __name__ == '__main__':
