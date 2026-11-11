@@ -1,0 +1,474 @@
+{
+  "rule_files": [],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "name": "Every image dashboard expression preserves selected-instance values and both GPUs",
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "up{instance=\"flux.example\",job=\"flux2\"}",
+          "values": "1+0x10"
+        },
+        {
+          "series": "flux2_model_ready{instance=\"flux.example\",job=\"flux2\"}",
+          "values": "1+0x10"
+        },
+        {
+          "series": "gpu_exporter_up{instance=\"flux.example\",job=\"flux2\"}",
+          "values": "1+0x10"
+        },
+        {
+          "series": "flux2_disk_available_bytes{instance=\"flux.example\",job=\"flux2\"}",
+          "values": "21474836480+0x10"
+        },
+        {
+          "series": "flux2_jobs{instance=\"flux.example\",job=\"flux2\",state=\"queued\"}",
+          "values": "2+0x10"
+        },
+        {
+          "series": "flux2_jobs{instance=\"flux.example\",job=\"flux2\",state=\"running\"}",
+          "values": "1+0x10"
+        },
+        {
+          "series": "flux2_oldest_queued_age_seconds{instance=\"flux.example\",job=\"flux2\"}",
+          "values": "60+0x10"
+        },
+        {
+          "series": "flux2_jobs_completed_total{instance=\"flux.example\",job=\"flux2\"}",
+          "values": "0+1x10"
+        },
+        {
+          "series": "flux2_generation_starts_total{instance=\"flux.example\",job=\"flux2\"}",
+          "values": "2+2x10"
+        },
+        {
+          "series": "flux2_jobs_failed_total{instance=\"flux.example\",job=\"flux2\",reason=\"timeout\"}",
+          "values": "0+1x10"
+        },
+        {
+          "series": "flux2_requests_rejected_total{instance=\"flux.example\",job=\"flux2\",reason=\"queue_full\"}",
+          "values": "0+2x10"
+        },
+        {
+          "series": "flux2_queue_wait_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"10\"}",
+          "values": "0+1x10"
+        },
+        {
+          "series": "flux2_queue_wait_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"30\"}",
+          "values": "0+2x10"
+        },
+        {
+          "series": "flux2_queue_wait_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"+Inf\"}",
+          "values": "0+2x10"
+        },
+        {
+          "series": "flux2_generation_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"10\"}",
+          "values": "0+1x10"
+        },
+        {
+          "series": "flux2_generation_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"30\"}",
+          "values": "0+2x10"
+        },
+        {
+          "series": "flux2_generation_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"+Inf\"}",
+          "values": "0+2x10"
+        },
+        {
+          "series": "flux2_job_duration_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"10\"}",
+          "values": "0+1x10"
+        },
+        {
+          "series": "flux2_job_duration_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"30\"}",
+          "values": "0+2x10"
+        },
+        {
+          "series": "flux2_job_duration_seconds_bucket{instance=\"flux.example\",job=\"flux2\",le=\"+Inf\"}",
+          "values": "0+2x10"
+        },
+        {
+          "series": "gpu_memory_used_bytes{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "10737418240+0x10"
+        },
+        {
+          "series": "gpu_memory_total_bytes{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "85899345920+0x10"
+        },
+        {
+          "series": "gpu_utilization_percent{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "50+0x10"
+        },
+        {
+          "series": "gpu_temperature_celsius{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "40+0x10"
+        },
+        {
+          "series": "gpu_power_watts{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "200+0x10"
+        },
+        {
+          "series": "gpu_memory_used_bytes{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "21474836480+0x10"
+        },
+        {
+          "series": "gpu_memory_total_bytes{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "85899345920+0x10"
+        },
+        {
+          "series": "gpu_utilization_percent{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "50+0x10"
+        },
+        {
+          "series": "gpu_temperature_celsius{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "40+0x10"
+        },
+        {
+          "series": "gpu_power_watts{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "200+0x10"
+        },
+        {
+          "series": "up{instance=\"other.example\",job=\"flux2\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_model_ready{instance=\"other.example\",job=\"flux2\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_exporter_up{instance=\"other.example\",job=\"flux2\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_disk_available_bytes{instance=\"other.example\",job=\"flux2\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_jobs{instance=\"other.example\",job=\"flux2\",state=\"queued\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_jobs{instance=\"other.example\",job=\"flux2\",state=\"running\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_oldest_queued_age_seconds{instance=\"other.example\",job=\"flux2\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_jobs_completed_total{instance=\"other.example\",job=\"flux2\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_generation_starts_total{instance=\"other.example\",job=\"flux2\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_jobs_failed_total{instance=\"other.example\",job=\"flux2\",reason=\"timeout\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_requests_rejected_total{instance=\"other.example\",job=\"flux2\",reason=\"queue_full\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_queue_wait_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"10\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_queue_wait_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"30\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_queue_wait_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"+Inf\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_generation_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"10\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_generation_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"30\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_generation_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"+Inf\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_job_duration_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"10\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_job_duration_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"30\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "flux2_job_duration_seconds_bucket{instance=\"other.example\",job=\"flux2\",le=\"+Inf\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_memory_used_bytes{instance=\"other.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_memory_total_bytes{instance=\"other.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_utilization_percent{instance=\"other.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_temperature_celsius{instance=\"other.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_power_watts{instance=\"other.example\",job=\"flux2\",gpu=\"0\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_memory_used_bytes{instance=\"other.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_memory_total_bytes{instance=\"other.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_utilization_percent{instance=\"other.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_temperature_celsius{instance=\"other.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "999+100x10"
+        },
+        {
+          "series": "gpu_power_watts{instance=\"other.example\",job=\"flux2\",gpu=\"1\"}",
+          "values": "999+100x10"
+        }
+      ],
+      "promql_expr_test": [
+        {
+          "expr": "up{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "up{instance=\"flux.example\",job=\"flux2\"}",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "expr": "flux2_model_ready{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "flux2_model_ready{instance=\"flux.example\",job=\"flux2\"}",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "expr": "gpu_exporter_up{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "gpu_exporter_up{instance=\"flux.example\",job=\"flux2\"}",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "expr": "flux2_disk_available_bytes{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "flux2_disk_available_bytes{instance=\"flux.example\",job=\"flux2\"}",
+              "value": 21474836480
+            }
+          ]
+        },
+        {
+          "expr": "flux2_jobs{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "flux2_jobs{instance=\"flux.example\",job=\"flux2\",state=\"queued\"}",
+              "value": 2
+            },
+            {
+              "labels": "flux2_jobs{instance=\"flux.example\",job=\"flux2\",state=\"running\"}",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "expr": "flux2_oldest_queued_age_seconds{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "flux2_oldest_queued_age_seconds{instance=\"flux.example\",job=\"flux2\"}",
+              "value": 60
+            }
+          ]
+        },
+        {
+          "expr": "sum(rate(flux2_jobs_completed_total{job=\"flux2\",instance=\"flux.example\"}[5m])) * 60",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "{}",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "expr": "flux2_generation_starts_total{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "flux2_generation_starts_total{instance=\"flux.example\",job=\"flux2\"}",
+              "value": 22
+            }
+          ]
+        },
+        {
+          "expr": "sum by(reason) (rate(flux2_jobs_failed_total{job=\"flux2\",instance=\"flux.example\"}[5m])) * 60",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "{reason=\"timeout\"}",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "expr": "sum by(reason) (rate(flux2_requests_rejected_total{job=\"flux2\",instance=\"flux.example\"}[5m])) * 60",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "{reason=\"queue_full\"}",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum by(le) (rate(flux2_queue_wait_seconds_bucket{job=\"flux2\",instance=\"flux.example\"}[5m])))",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "{}",
+              "value": 28
+            }
+          ]
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum by(le) (rate(flux2_generation_seconds_bucket{job=\"flux2\",instance=\"flux.example\"}[5m])))",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "{}",
+              "value": 28
+            }
+          ]
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum by(le) (rate(flux2_job_duration_seconds_bucket{job=\"flux2\",instance=\"flux.example\"}[5m])))",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "{}",
+              "value": 28
+            }
+          ]
+        },
+        {
+          "expr": "gpu_memory_used_bytes{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "gpu_memory_used_bytes{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+              "value": 10737418240
+            },
+            {
+              "labels": "gpu_memory_used_bytes{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+              "value": 21474836480
+            }
+          ]
+        },
+        {
+          "expr": "gpu_utilization_percent{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "gpu_utilization_percent{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+              "value": 50
+            },
+            {
+              "labels": "gpu_utilization_percent{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+              "value": 50
+            }
+          ]
+        },
+        {
+          "expr": "100 * gpu_memory_used_bytes{job=\"flux2\",instance=\"flux.example\"} / gpu_memory_total_bytes{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+              "value": 12.5
+            },
+            {
+              "labels": "{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+              "value": 25
+            }
+          ]
+        },
+        {
+          "expr": "gpu_temperature_celsius{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "gpu_temperature_celsius{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+              "value": 40
+            },
+            {
+              "labels": "gpu_temperature_celsius{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "expr": "gpu_power_watts{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "gpu_power_watts{instance=\"flux.example\",job=\"flux2\",gpu=\"0\"}",
+              "value": 200
+            },
+            {
+              "labels": "gpu_power_watts{instance=\"flux.example\",job=\"flux2\",gpu=\"1\"}",
+              "value": 200
+            }
+          ]
+        },
+        {
+          "expr": "ALERTS{job=\"flux2\",instance=\"flux.example\",alertname=~\"Flux2.*\"}",
+          "eval_time": "10m",
+          "exp_samples": []
+        },
+        {
+          "expr": "flux2_jobs_completed_total{job=\"flux2\",instance=\"flux.example\"}",
+          "eval_time": "10m",
+          "exp_samples": [
+            {
+              "labels": "flux2_jobs_completed_total{instance=\"flux.example\",job=\"flux2\"}",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fuzzy_compare": true
+}

@@ -1,5 +1,43 @@
 # LLM Grafana
 
+## FLUX.2 image dashboard
+
+`dashboards/flux2.json` is a separate database-managed dashboard with UID
+`flux2-inference`. Import it after the companion Prometheus `flux2` job and
+image backend are healthy. Keep `inference-baseline`, its 24 panels and its
+revision history intact. No Grafana image rollout or file provisioning is needed.
+Back up the current live dashboards before an API/UI import and export the saved
+image dashboard afterward. Use Grafana's version check when overwriting it later.
+
+The **Image Pod** variable discovers only `up{job="flux2"}`. Every panel filters
+the selected instance before aggregation; both GPUs retain their `gpu` label.
+Twenty panels show readiness, scrape/GPU collector health, output disk space,
+queued/running jobs, oldest queued age, starts/completions, safe failure/rejection
+categories, queue/generation/job p95 latency, GPU measurements and alert state.
+Idle percentiles and missing measurements remain **No data**. No prompts, user
+UUIDs or job IDs are metric labels. A ready/GPU chart complements the backend's
+BF16/no-offload validation; charts alone do not prove dtype or tensor placement.
+
+The companion Prometheus repository owns alert rules and threshold tests.
+The alert panel displays pending/firing rules; outbound notifications require
+separate Alertmanager configuration and a chosen receiver. Browser-only image
+retention is independent of the backend's 24-hour temporary job/output TTL.
+
+Read-only acceptance (use the actual Pod hostname, without a scheme):
+
+```sh
+python scripts/test_flux2_dashboard.py
+promtool test rules scripts/flux2-queries.test.json
+GRAFANA_SETTINGS_FILE=/path/to/private/settings.env python scripts/check-flux2-deployment.py --expected-instance image-pod-8889.proxy.runpod.net
+```
+
+The cloud check verifies the live dashboard, private datasource, healthy model,
+both GPUs, serialized-worker queue bounds, all panel queries and seven loaded
+alert rules. It does not generate images or change deployments. Also run the
+existing `scripts/check-deployment.py` with current chat instances to verify chat
+monitoring. For rollback, remove/disable the image scrape while retaining chat
+targets and both monitoring volumes; keep the separate image dashboard for history.
+
 Grafana for the personal Qwen chat system. Sibling projects:
 [LLM server](https://github.com/alstomli/llm-inference-server),
 [Prometheus](https://github.com/alstomli/llm-prometheus), and
