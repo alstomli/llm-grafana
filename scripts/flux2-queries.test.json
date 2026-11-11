@@ -213,6 +213,14 @@
         {
           "series": "gpu_power_watts{instance=\"other.example\",job=\"flux2\",gpu=\"1\"}",
           "values": "999+100x10"
+        },
+        {
+          "series": "flux2_oom_total{job=\"flux2\",instance=\"flux.example\"}",
+          "values": "0+0x10"
+        },
+        {
+          "series": "flux2_oom_total{job=\"flux2\",instance=\"other.example\"}",
+          "values": "5+1x10"
         }
       ],
       "promql_expr_test": [
@@ -402,12 +410,12 @@
           "exp_samples": []
         },
         {
-          "expr": "flux2_jobs_completed_total{job=\"flux2\",instance=\"flux.example\"}",
+          "expr": "flux2_oom_total{job=\"flux2\",instance=\"flux.example\"}",
           "eval_time": "10m",
           "exp_samples": [
             {
-              "labels": "flux2_jobs_completed_total{instance=\"flux.example\",job=\"flux2\"}",
-              "value": 10
+              "labels": "flux2_oom_total{instance=\"flux.example\",job=\"flux2\"}",
+              "value": 0
             }
           ]
         }

@@ -69,6 +69,8 @@ def main():
     for metric in ('up', 'flux2_model_ready', 'gpu_exporter_up'):
         values = query(metric + selector)
         assert len(values) == 1 and values[0]['value'][1] == '1', f'{metric} must be healthy'
+    oom = query('flux2_oom_total' + selector)
+    assert len(oom) == 1 and float(oom[0]['value'][1]) == 0, 'OOM counter must be present and zero during rollout acceptance'
     for metric in ('gpu_memory_used_bytes', 'gpu_memory_total_bytes'):
         values = query(metric + selector)
         assert {v['metric'].get('gpu') for v in values} == {'0', '1'}, f'{metric}: both GPUs required'
@@ -84,7 +86,10 @@ def main():
             query(target['expr'].replace('${pod}', args.expected_instance).replace('$__rate_interval', '5m'))
     rules = prom('/api/v1/rules?type=alert')['groups']
     flux_rules = [r for group in rules if group['name'] == 'flux2' for r in group['rules']]
-    assert len(flux_rules) == 6 and all(r['health'] == 'ok' for r in flux_rules), 'FLUX.2 alert rules missing or unhealthy'
+    expected_rules = {'Flux2ScrapeDown', 'Flux2ModelNotReady', 'Flux2GpuCollectorDown',
+                      'Flux2RequiredMetricsMissing', 'Flux2OutOfMemory', 'Flux2GenerationFailures',
+                      'Flux2DiskLow', 'Flux2DiskCritical'}
+    assert {r['name'] for r in flux_rules} == expected_rules and all(r['health'] == 'ok' for r in flux_rules), 'FLUX.2 alert rules missing or unhealthy'
     print('PASS: image dashboard, protected scrape, both GPUs, no-queue admission, queries and alert rules')
 
 

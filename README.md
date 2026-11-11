@@ -13,12 +13,14 @@ The **Image Pod** variable discovers only `up{job="flux2"}`. Every panel filters
 the selected instance before aggregation; both GPUs retain their `gpu` label.
 Eighteen panels show readiness, scrape/GPU collector health, output disk space,
 active jobs, starts/completions, safe failure/rejection
-categories, generation/job p95 latency, GPU measurements and alert state.
+categories, generation/job p95 latency, GPU measurements, load/generation OOM count and alert state.
 Idle percentiles and missing measurements remain **No data**. No prompts, user
 UUIDs or job IDs are metric labels. A ready/GPU chart complements the backend's
 BF16/no-offload validation; charts alone do not prove dtype or tensor placement.
 
-The companion Prometheus repository owns alert rules and threshold tests.
+The companion Prometheus repository owns eight alert rules and threshold tests,
+including immediate detection of any observed OOM and missing required exporter
+metrics. Live acceptance requires the initialized OOM counter to be zero.
 The alert panel displays pending/firing rules; outbound notifications require
 separate Alertmanager configuration and a chosen receiver. Browser-only image
 retention is independent of the backend's 24-hour temporary output TTL.
@@ -34,7 +36,7 @@ GRAFANA_SETTINGS_FILE=/path/to/private/settings.env python scripts/check-flux2-d
 ```
 
 The cloud check verifies the live dashboard, private datasource, healthy model,
-both GPUs, single active-job/no-queue bounds, all panel queries and six loaded
+both GPUs, single active-job/no-queue bounds, all panel queries and eight loaded
 alert rules. It does not generate images or change deployments. Also run the
 existing `scripts/check-deployment.py` with current chat instances to verify chat
 monitoring. For rollback, remove/disable the image scrape while retaining chat

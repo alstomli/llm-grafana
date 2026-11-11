@@ -814,8 +814,8 @@
     {
       "id": 18,
       "type": "timeseries",
-      "title": "Completed jobs",
-      "description": "Cumulative completed jobs since process start; persisted history and browser copies have their own lifecycle.",
+      "title": "OOM events",
+      "description": "Initialized counter covering GPU OOM during loading, warmup and generation. Any observed event triggers the dedicated critical alert.",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -838,9 +838,9 @@
       },
       "targets": [
         {
-          "expr": "flux2_jobs_completed_total{job=\"flux2\",instance=\"${pod}\"}",
+          "expr": "flux2_oom_total{job=\"flux2\",instance=\"${pod}\"}",
           "refId": "A",
-          "legendFormat": "Completed jobs",
+          "legendFormat": "OOM events",
           "instant": false
         }
       ],
