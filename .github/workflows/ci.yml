@@ -1,0 +1,14 @@
+name: Dashboard checks
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: python scripts/test_flux2_dashboard.py
+      - name: Exercise all dashboard PromQL with two-Pod and two-GPU fixtures
+        run: docker run --rm --entrypoint /bin/promtool -v "$PWD/scripts:/tests:ro" prom/prometheus:v3.5.0 test rules /tests/flux2-queries.test.json
