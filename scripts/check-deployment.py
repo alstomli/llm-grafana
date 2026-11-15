@@ -44,11 +44,13 @@ assert get('/api/dashboards/uid/inference-baseline', True)['meta']['provisioned'
 variables = dashboard.get('templating', {}).get('list', [])
 pod_variable = next(item for item in variables if item['name'] == 'pod')
 assert pod_variable['label'] == 'Pod' and pod_variable['multi'] is False
-selectors = re.compile(r'\b(up|gpu_[a-zA-Z0-9_:]+|vllm:[a-zA-Z0-9_:]+)(?:\{([^{}]*)\})?')
+metric_names = re.compile(r'\b(?:up|gpu_[a-zA-Z0-9_:]+|vllm:[a-zA-Z0-9_:]+)')
+selector_suffix = '{job="vllm",instance="${pod}"}'
 for panel in dashboard['panels']:
     for target in panel.get('targets', []):
-        for match in selectors.finditer(target.get('expr', '')):
-            assert 'instance="${pod}"' in (match.group(2) or ''), f'Unfiltered metric in panel {panel["id"]}'
+        expr = target.get('expr', '')
+        for match in metric_names.finditer(expr):
+            assert expr.startswith(selector_suffix, match.end()), f'Unfiltered metric in panel {panel["id"]}'
 datasource = get('/api/datasources/uid/prometheus', True)
 assert datasource['url'] == 'http://prometheus.railway.internal:9090'
 assert get('/api/datasources/uid/prometheus/health', True)['status'] == 'OK'
