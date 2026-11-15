@@ -1,4 +1,5 @@
 {
+  "id": 1,
   "panels": [
     {
       "datasource": {
@@ -1428,14 +1429,14 @@
       {
         "current": {
           "selected": true,
-          "text": "rp93m3noz3l9lt",
-          "value": "rp93m3noz3l9lt-8888.proxy.runpod.net"
+          "text": "zwwucot0v5wy0b",
+          "value": "zwwucot0v5wy0b-8889.proxy.runpod.net"
         },
         "datasource": {
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "definition": "label_values(up{job=\"vllm\"}, instance)",
+        "definition": "label_values(up{job=\"vllm\",instance=\"zwwucot0v5wy0b-8889.proxy.runpod.net\"}, instance)",
         "hide": 0,
         "includeAll": false,
         "label": "Pod",
@@ -1443,7 +1444,7 @@
         "name": "pod",
         "options": [],
         "query": {
-          "query": "label_values(up{job=\"vllm\"}, instance)",
+          "query": "label_values(up{job=\"vllm\",instance=\"zwwucot0v5wy0b-8889.proxy.runpod.net\"}, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -1461,5 +1462,5 @@
   "timezone": "browser",
   "title": "Qwen \u00b7 Inference & GPU",
   "uid": "inference-baseline",
-  "version": 9
+  "version": 14
 }

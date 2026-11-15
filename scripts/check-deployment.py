@@ -44,7 +44,8 @@ assert get('/api/dashboards/uid/inference-baseline', True)['meta']['provisioned'
 variables = dashboard.get('templating', {}).get('list', [])
 pod_variable = next(item for item in variables if item['name'] == 'pod')
 assert pod_variable['label'] == 'Pod' and pod_variable['multi'] is False
-selectors = re.compile(r'\b(up|gpu_[a-zA-Z0-9_:]+|vllm:[a-zA-Z0-9_:]+)(?:\{([^{}]*)\})?')
+# Grafana interpolation tokens contain braces inside the selector labels.
+selectors = re.compile(r'\b(up|gpu_[a-zA-Z0-9_:]+|vllm:[a-zA-Z0-9_:]+)(?:\{((?:\$\{[^{}]*\}|[^{}])*)\})?')
 for panel in dashboard['panels']:
     for target in panel.get('targets', []):
         for match in selectors.finditer(target.get('expr', '')):

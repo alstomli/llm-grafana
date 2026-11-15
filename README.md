@@ -101,41 +101,33 @@ The local cloud-login file `.secrets/railway-grafana.env` contains
 `GRAFANA_PASSWORD` for `python scripts/check-deployment.py`. It and local JSON
 backups are ignored by Git and excluded from image builds.
 
-## Choose a Runpod Pod
+## Current BF16 Pod
 
-The existing `inference-baseline` dashboard retains its 24 panels and adds one
-query variable, `pod`, displayed as **Pod**. It queries
-`label_values(up{job="vllm"}, instance)` and uses named regex captures to display
-the Pod ID while retaining the full instance hostname as its value. Selection is
-single-Pod, with the original `rp93m3noz3l9lt` as the saved default.
+The database-managed `inference-baseline` dashboard retains its 24 panels.
+Its single-select **Pod** variable is restricted to
+`label_values(up{job="vllm",instance="zwwucot0v5wy0b-8889.proxy.runpod.net"}, instance)`
+and saves `zwwucot0v5wy0b` as the current selection.
 
-Every vLLM/GPU metric selector includes `job="vllm"` and
-`instance="${pod}"`. Filtering happens before sums, rates, and histogram
-quantiles, so selecting one Pod does not combine its latency buckets or counters
-with the other Pod. Existing instance labels and historical series are retained.
-The panel IDs, layout, units, and visualization settings are reused.
+Every vLLM/GPU selector includes `job="vllm"` and `instance="${pod}"`
+before aggregation. Historical series retain their original instance labels.
+The November 15, 2026 migration from `66j3wfha6suokg` changed only the
+variable definition, query and current value in live dashboard version 14.
+Panels, layout, private datasource, volume and revision history are preserved.
+The snapshot is exported from that saved live dashboard; no image rollout is needed.
+Back up the latest live dashboard privately before any subsequent API update,
+keep its current version, and save with `overwrite: false` for conflict detection.
 
-The monitored instances are:
-
-- `rp93m3noz3l9lt-8888.proxy.runpod.net`: existing inference Pod.
-- `ftntkktzid9f4p-8889.proxy.runpod.net`: original BF16 Pod's protected relay.
-
-The live dashboard is backed up before editing and updated in its database using
-the same UID and a version check. No Grafana image redeployment is needed. The
-repository snapshot is the edited live dashboard. The related Prometheus and
-Runpod changes are documented in their sibling repositories.
-
-Validate all 24 filters, both scrapes, and GPU health with:
+Validate login protection, all 24 filters, the private datasource and the chat
+scrape/GPU health with:
 
 ```sh
 python scripts/check-deployment.py \
-  --expected-instance rp93m3noz3l9lt-8888.proxy.runpod.net \
-  --expected-instance ftntkktzid9f4p-8889.proxy.runpod.net
+  --expected-instance zwwucot0v5wy0b-8889.proxy.runpod.net
 ```
 
 For a worktree, `GRAFANA_SETTINGS_FILE` can point to the existing ignored settings
-file. Query validation uses the actual private Prometheus datasource. Latency and
-token-rate panels need inference activity inside the selected time range;
+file. This check covers the `vllm` job; the separate FLUX.2 check is above.
+Latency and token-rate panels require inference activity in the selected range;
 idle/unavailable metrics are not replaced with invented zero values.
 
 ## Local Docker
