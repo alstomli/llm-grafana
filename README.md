@@ -107,7 +107,8 @@ The existing `inference-baseline` dashboard retains its 24 panels and adds one
 query variable, `pod`, displayed as **Pod**. It queries
 `label_values(up{job="vllm"}, instance)` and uses named regex captures to display
 the Pod ID while retaining the full instance hostname as its value. Selection is
-single-Pod, with the original `rp93m3noz3l9lt` as the saved default.
+single-Pod, with the 4-bit Pod `kdm8qghqezo72e`
+(`kdm8qghqezo72e-8889.proxy.runpod.net`) as the saved default.
 
 Every vLLM/GPU metric selector includes `job="vllm"` and
 `instance="${pod}"`. Filtering happens before sums, rates, and histogram

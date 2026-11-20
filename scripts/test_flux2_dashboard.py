@@ -40,6 +40,9 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(chat['uid'], 'inference-baseline')
         self.assertEqual(len(chat['panels']), 24)
         self.assertNotEqual(chat['uid'], self.dashboard['uid'])
+        pod = next(v for v in chat['templating']['list'] if v['name'] == 'pod')
+        self.assertEqual(pod['current']['value'], 'kdm8qghqezo72e-8889.proxy.runpod.net')
+        self.assertEqual(pod['current']['text'], 'kdm8qghqezo72e')
         for panel in chat['panels']:
             for target in panel.get('targets', []):
                 self.assertNotIn('flux2', target.get('expr', ''))
