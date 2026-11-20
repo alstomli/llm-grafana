@@ -1428,8 +1428,8 @@
       {
         "current": {
           "selected": true,
-          "text": "rp93m3noz3l9lt",
-          "value": "rp93m3noz3l9lt-8888.proxy.runpod.net"
+          "text": "kdm8qghqezo72e",
+          "value": "kdm8qghqezo72e-8889.proxy.runpod.net"
         },
         "datasource": {
           "type": "prometheus",
