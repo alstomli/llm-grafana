@@ -1,4 +1,4 @@
-"""Validate image query isolation and the existing chat-dashboard contract."""
+"""Validate image query isolation, the chat dashboard and its deployment check."""
 import contextlib
 import copy
 import importlib.util
@@ -73,6 +73,7 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(pod['definition'], query)
         self.assertFalse(pod['multi'] or pod['includeAll'])
         self.assertEqual((pod['current'], pod['options']), ({}, []))
+        self.assertEqual(pod['refresh'], 2)  # list Pods again when the time range changes
         self.assertNotRegex(source, r'[a-z0-9]+-[0-9]+\.proxy\.runpod\.net')
         # Grafana reads the named groups as the shown text and the stored value.
         pattern = pod['regex'].strip('/').replace('(?<', '(?P<')
