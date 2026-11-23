@@ -103,12 +103,18 @@ backups are ignored by Git and excluded from image builds.
 
 ## Choose a Runpod Pod
 
-The existing `inference-baseline` dashboard retains its 24 panels and adds one
-query variable, `pod`, displayed as **Pod**. It queries
-`label_values(up{job="vllm"}, instance)` and uses named regex captures to display
-the Pod ID while retaining the full instance hostname as its value. Selection is
-single-Pod, with the 4-bit Pod `8l7n75h7m4tma8`
-(`8l7n75h7m4tma8-8889.proxy.runpod.net`) as the saved default.
+The existing `inference-baseline` dashboard retains its 24 panels and has two
+variables. **Profile** (`profile`) offers `4bit` and `bf16` and opens on `4bit`.
+**Pod** (`pod`) queries
+`label_values(up{job="vllm", profile="${profile}"}, instance)`, so it lists only
+the selected profile's Pods. It uses named regex captures to display the Pod ID
+while retaining the full instance hostname as its value. Selection is single-Pod
+and no Pod is saved; Grafana selects one from the list. When saving the dashboard,
+do not save the current variable values, and leave the exported Pod empty.
+
+The `profile` label comes from Prometheus. Series collected before it was added
+do not appear in the Pod picker. After a migration the previous Pod stays listed
+while the selected time range covers its data.
 
 Every vLLM/GPU metric selector includes `job="vllm"` and
 `instance="${pod}"`. Filtering happens before sums, rates, and histogram
@@ -116,22 +122,33 @@ quantiles, so selecting one Pod does not combine its latency buckets or counters
 with the other Pod. Existing instance labels and historical series are retained.
 The panel IDs, layout, units, and visualization settings are reused.
 
-The monitored instances are:
-
-- `rp93m3noz3l9lt-8888.proxy.runpod.net`: existing inference Pod.
-- `ftntkktzid9f4p-8889.proxy.runpod.net`: original BF16 Pod's protected relay.
+The monitored Pods are whatever Prometheus scrapes; this repository does not
+list them. The current Pod of each profile is recorded in `llm-inference-server`.
 
 The live dashboard is backed up before editing and updated in its database using
 the same UID and a version check. No Grafana image redeployment is needed. The
 repository snapshot is the edited live dashboard. The related Prometheus and
 Runpod changes are documented in their sibling repositories.
 
-Validate all 24 filters, both scrapes, and GPU health with:
+Validate all 24 filters, the scrapes, and GPU health with:
 
 ```sh
-python scripts/check-deployment.py \
-  --expected-instance rp93m3noz3l9lt-8888.proxy.runpod.net \
-  --expected-instance ftntkktzid9f4p-8889.proxy.runpod.net
+python scripts/check-deployment.py
+```
+
+This requires every vLLM target to be up. When a profile is stopped on purpose,
+name only the profiles that must be up (repeat `--profile` for more than one):
+
+```sh
+python scripts/check-deployment.py --profile 4bit
+```
+
+A named profile with no target fails. Add `--expected-instance` once per Pod to
+also require that the checked targets are exactly those hostnames:
+
+```sh
+python scripts/check-deployment.py --profile 4bit \
+  --expected-instance your4bitpodid-8889.proxy.runpod.net
 ```
 
 For a worktree, `GRAFANA_SETTINGS_FILE` can point to the existing ignored settings
