@@ -41,8 +41,8 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(len(chat['panels']), 24)
         self.assertNotEqual(chat['uid'], self.dashboard['uid'])
         pod = next(v for v in chat['templating']['list'] if v['name'] == 'pod')
-        self.assertEqual(pod['current']['value'], '8l7n75h7m4tma8-8889.proxy.runpod.net')
-        self.assertEqual(pod['current']['text'], '8l7n75h7m4tma8')
+        self.assertEqual(pod['current']['value'], 'stfd3sdb8furvq-8889.proxy.runpod.net')
+        self.assertEqual(pod['current']['text'], 'stfd3sdb8furvq')
         for panel in chat['panels']:
             for target in panel.get('targets', []):
                 self.assertNotIn('flux2', target.get('expr', ''))

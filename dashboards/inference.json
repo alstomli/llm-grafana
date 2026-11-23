@@ -1428,8 +1428,8 @@
       {
         "current": {
           "selected": true,
-          "text": "8l7n75h7m4tma8",
-          "value": "8l7n75h7m4tma8-8889.proxy.runpod.net"
+          "text": "stfd3sdb8furvq",
+          "value": "stfd3sdb8furvq-8889.proxy.runpod.net"
         },
         "datasource": {
           "type": "prometheus",
