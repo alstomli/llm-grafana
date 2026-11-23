@@ -1428,14 +1428,37 @@
       {
         "current": {
           "selected": true,
-          "text": "stfd3sdb8furvq",
-          "value": "stfd3sdb8furvq-8889.proxy.runpod.net"
+          "text": "4bit",
+          "value": "4bit"
         },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Profile",
+        "multi": false,
+        "name": "profile",
+        "options": [
+          {
+            "selected": true,
+            "text": "4bit",
+            "value": "4bit"
+          },
+          {
+            "selected": false,
+            "text": "bf16",
+            "value": "bf16"
+          }
+        ],
+        "query": "4bit,bf16",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "definition": "label_values(up{job=\"vllm\"}, instance)",
+        "definition": "label_values(up{job=\"vllm\", profile=\"${profile}\"}, instance)",
         "hide": 0,
         "includeAll": false,
         "label": "Pod",
@@ -1443,7 +1466,7 @@
         "name": "pod",
         "options": [],
         "query": {
-          "query": "label_values(up{job=\"vllm\"}, instance)",
+          "query": "label_values(up{job=\"vllm\", profile=\"${profile}\"}, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,

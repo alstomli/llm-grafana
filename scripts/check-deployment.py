@@ -12,7 +12,10 @@ from urllib.request import Request, urlopen
 BASE = 'https://grafana-production-5c5e.up.railway.app'
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
-parser.add_argument('--expected-instance', action='append', default=[])
+parser.add_argument('--profile', action='append', default=[], choices=['4bit', 'bf16'],
+                    help='require only this profile (repeatable); without it every vLLM target must be up')
+parser.add_argument('--expected-instance', action='append', default=[],
+                    help='instance that must be among the required targets, with no others (repeatable)')
 args = parser.parse_args()
 settings_file = Path(os.environ.get('GRAFANA_SETTINGS_FILE', root / '.secrets/railway-grafana.env'))
 settings = dict(line.split('=', 1) for line in settings_file.read_text().splitlines() if '=' in line)
@@ -44,7 +47,7 @@ assert get('/api/dashboards/uid/inference-baseline', True)['meta']['provisioned'
 variables = dashboard.get('templating', {}).get('list', [])
 pod_variable = next(item for item in variables if item['name'] == 'pod')
 assert pod_variable['label'] == 'Pod' and pod_variable['multi'] is False
-selectors = re.compile(r'\b(up|gpu_[a-zA-Z0-9_:]+|vllm:[a-zA-Z0-9_:]+)(?:\{([^{}]*)\})?')
+selectors = re.compile(r'\b(up|gpu_[a-zA-Z0-9_:]+|vllm:[a-zA-Z0-9_:]+)(?:\{((?:"[^"]*"|[^{}])*)\})?')
 for panel in dashboard['panels']:
     for target in panel.get('targets', []):
         for match in selectors.finditer(target.get('expr', '')):
@@ -56,6 +59,10 @@ print('PASS: 24 dashboard panels and private Prometheus connection')
 
 targets = get('/api/datasources/proxy/uid/prometheus/api/v1/targets', True)['data']['activeTargets']
 active_targets = [target for target in targets if target['labels'].get('job') == 'vllm']
+if args.profile:
+    active_targets = [target for target in active_targets if target['labels'].get('profile') in args.profile]
+    missing = set(args.profile) - {target['labels']['profile'] for target in active_targets}
+    assert not missing, f'No scrape target for profile: {", ".join(sorted(missing))}'
 assert active_targets and all(target['health'] == 'up' for target in active_targets), 'Active vLLM scrape target is unhealthy'
 active_instances = {target['labels']['instance'] for target in active_targets}
 if args.expected_instance:
