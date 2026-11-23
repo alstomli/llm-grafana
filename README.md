@@ -105,12 +105,13 @@ backups are ignored by Git and excluded from image builds.
 
 The existing `inference-baseline` dashboard retains its 24 panels and has two
 variables. **Profile** (`profile`) offers `4bit` and `bf16` and opens on `4bit`.
-**Pod** (`pod`) queries
-`label_values(up{job="vllm", profile="${profile}"}, instance)`, so it lists only
-the selected profile's Pods. It uses named regex captures to display the Pod ID
+**Pod** (`pod`) lists only the selected profile's Pods, the most recently scraped
+first, by querying the latest `up` sample time of each instance in the selected
+time range. It uses named regex captures to display the Pod ID
 while retaining the full instance hostname as its value. Selection is single-Pod
-and no Pod is saved; Grafana selects one from the list. When saving the dashboard,
-do not save the current variable values, and leave the exported Pod empty.
+and no Pod is saved; Grafana selects the first in the list. Keep the variable's
+sort disabled: alphabetical order can select a previous Pod after a migration.
+When saving the dashboard, do not save the current variable values, and leave the exported Pod empty.
 
 The `profile` label comes from Prometheus. Series collected before it was added
 do not appear in the Pod picker. After a migration the previous Pod stays listed
