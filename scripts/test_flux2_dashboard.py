@@ -68,16 +68,19 @@ class DashboardTests(unittest.TestCase):
     def test_chat_pod_picker_lists_the_selected_profile_with_no_saved_pod(self):
         source = (ROOT / 'dashboards/inference.json').read_text(encoding='utf-8')
         pod = next(v for v in json.loads(source)['templating']['list'] if v['name'] == 'pod')
-        query = 'label_values(up{job="vllm", profile="${profile}"}, instance)'
+        # Newest scrape first, in query order: Grafana opens on the first Pod listed.
+        query = ('query_result(sort_desc(max by (instance) (max_over_time('
+                 'timestamp(up{job="vllm", profile="${profile}"})[$__range:1m]))))')
         self.assertEqual(pod['query']['query'], query)
         self.assertEqual(pod['definition'], query)
         self.assertFalse(pod['multi'] or pod['includeAll'])
         self.assertEqual((pod['current'], pod['options']), ({}, []))
+        self.assertEqual(pod['sort'], 0)
         self.assertEqual(pod['refresh'], 2)  # list Pods again when the time range changes
         self.assertNotRegex(source, r'[a-z0-9]+-[0-9]+\.proxy\.runpod\.net')
         # Grafana reads the named groups as the shown text and the stored value.
         pattern = pod['regex'].strip('/').replace('(?<', '(?P<')
-        match = re.search(pattern, 'fourbitpod-8889.proxy.runpod.net')
+        match = re.search(pattern, '{instance="fourbitpod-8889.proxy.runpod.net"} 1700000000 1700000000000')
         self.assertEqual(match.groupdict(), {'text': 'fourbitpod', 'value': 'fourbitpod-8889.proxy.runpod.net'})
 
     def test_chat_panels_filter_every_metric_by_job_and_selected_pod(self):
